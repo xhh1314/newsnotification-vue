@@ -1,0 +1,19 @@
+/.apt_generated/
+/target/
+/.setting/
+data/
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+/logs
+.tern-project
