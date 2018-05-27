@@ -11,7 +11,6 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.5.9.RELEASE</version>
-		<relativePath></relativePath>
 	</parent>
 	<dependencies>
 		<!-- Add typical dependencies for a web application 同时会附带对logback的支持 -->

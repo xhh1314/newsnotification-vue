@@ -165,7 +165,6 @@ public class ContentService {
 		return TagBOs;
 	}
 
-	private final  List<ContentDO> contentDOList = new ArrayList<>(500);
 
 	/**
 	 * @return 默认返回返回最近一周数据，最近一周都没有数据，则返回null
@@ -175,7 +174,6 @@ public class ContentService {
 		List<ContentDO> contentsDO = contentDao.listByRecentSevenDay();
 		if (contentsDO == null || contentsDO.isEmpty())
 			return null;
-		contentDOList.addAll(contentsDO);
 		List<ContentBO> contents = transferfromContentDO(contentsDO);
 		Collections.sort(contents);
 		return parseHtml(contents);

@@ -2,16 +2,16 @@ package cn.haiwai.newsnotification.web.controller;
 
 import java.util.List;
 
+import cn.haiwai.newsnotification.dao.ContentDao;
+import cn.haiwai.newsnotification.dao.bean.ContentDO;
+import cn.haiwai.newsnotification.manage.PageImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import cn.haiwai.newsnotification.manage.util.TimeTransfer;
 import cn.haiwai.newsnotification.service.ContentBO;
@@ -23,6 +23,9 @@ import cn.haiwai.newsnotification.service.TagBO;
 public class ForeController {
 	@Autowired
 	private ContentService cs;
+
+	@Autowired
+	private ContentDao contentDao;
 	private static final Logger log= LoggerFactory.getLogger("ForeController");
 	/**
 	 * @param model
@@ -129,6 +132,13 @@ public class ForeController {
 		model.addAttribute("tags",tags);
 		model.addAttribute("contents", contents);
 		return "fore/index";
+	}
+
+	@RequestMapping(value = "/listContent")
+	@ResponseBody
+	@CrossOrigin
+	public  List<ContentDO> listContentBO(){
+		return contentDao.listContent();
 	}
 
 }
