@@ -60,6 +60,7 @@ spring:
     request-context-attribute: request
     settings:
           number_format: 0.##########
+    prefix:
 #开发环境配置日志级别
 logging:
   level:

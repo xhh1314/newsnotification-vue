@@ -2,16 +2,14 @@ package cn.haiwai.newsnotification.web.controller;
 
 import java.util.List;
 
+import cn.haiwai.newsnotification.web.vo.IndexContentVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import cn.haiwai.newsnotification.manage.util.TimeTransfer;
 import cn.haiwai.newsnotification.service.ContentBO;
@@ -23,31 +21,44 @@ import cn.haiwai.newsnotification.service.TagBO;
 public class ForeController {
 	@Autowired
 	private ContentService cs;
-	private static final Logger log= LoggerFactory.getLogger("ForeController");
+	private static final Logger log = LoggerFactory.getLogger("ForeController");
+
 	/**
 	 * @param model
 	 * @return 返回到主页
 	 */
 	@RequestMapping(value = "/index")
 	public String index(ModelMap model) {
-		log.error("---------------------日志级别为：error-----------------------------{}","dd");
-		log.info("---------------------日志级别为：info-----------------------------{}","dd");
-		log.debug("---------------------日志级别为：debug-----------------------------{}","dd");
-		List<ContentBO> contents = cs.listContents();
-		if (contents == null) {
-			model.addAttribute("message", "最近7天无数据，请查看其他日期！");
-		}
-		List<TagBO> tags=cs.listAllTag();
-		model.addAttribute("tags",tags);
-		//访问首页时，默认显示当天日期
-		model.addAttribute("keyDate", TimeTransfer.getToday());
-		model.addAttribute("contents", contents);
+		log.error("---------------------日志级别为：error-----------------------------{}", "dd");
+		log.info("---------------------日志级别为：info-----------------------------{}", "dd");
+		log.debug("---------------------日志级别为：debug-----------------------------{}", "dd");
+//		List<ContentBO> contents = cs.listContents();
+//		if (contents == null) {
+//			model.addAttribute("message", "最近7天无数据，请查看其他日期！");
+//		}
+//		List<TagBO> tags = cs.listAllTag();
+//		model.addAttribute("tags", tags);
+//		// 访问首页时，默认显示当天日期
+//		model.addAttribute("keyDate", TimeTransfer.getToday());
+//		model.addAttribute("contents", contents);
 		return "fore/index";
+	}
+
+	@RequestMapping(value = "/content/getIndexContentData")
+	@ResponseBody
+	public IndexContentVo getIndexContentData() {
+		List<ContentBO> contents = cs.listContents();
+		List<TagBO> tags = cs.listAllTag();
+		IndexContentVo contentVo = new IndexContentVo();
+		contentVo.setContents(contents);
+		contentVo.setTags(tags);
+		contentVo.setKeyDate(TimeTransfer.getToday());
+		return contentVo;
 	}
 
 	/**
 	 * 所有的没有后缀地址的请求都转发到主页
-	 * 
+	 *
 	 * @return 转发到主页
 	 */
 	@RequestMapping(value = "/")
@@ -57,7 +68,7 @@ public class ForeController {
 
 	/**
 	 * 根据id展示一条content
-	 * 
+	 *
 	 * @param cid
 	 * @param model
 	 * @return
@@ -67,10 +78,10 @@ public class ForeController {
 		ContentBO content = cs.getContent(Integer.parseInt(cid));
 		if (content == null)
 			return "admin/comm/error_404";
-		List<TagBO> tags=cs.listAllTag();
-		//访问首页时，默认显示当天日期
+		List<TagBO> tags = cs.listAllTag();
+		// 访问首页时，默认显示当天日期
 		model.addAttribute("keyDate", TimeTransfer.getToday());
-		model.addAttribute("tags",tags);
+		model.addAttribute("tags", tags);
 		model.addAttribute("content", content);
 		return "fore/contentPage";
 	}
@@ -81,8 +92,8 @@ public class ForeController {
 		if (contents == null) {
 			model.addAttribute("message", date + "没有内容，请查看其他日期！");
 		}
-		List<TagBO> tags=cs.listAllTag();
-		model.addAttribute("tags",tags);
+		List<TagBO> tags = cs.listAllTag();
+		model.addAttribute("tags", tags);
 		model.addAttribute("contents", contents);
 		model.addAttribute("dateTemp", date);
 		return "fore/index";
@@ -94,8 +105,8 @@ public class ForeController {
 		if (contents == null) {
 			model.addAttribute("message", key + ",没有找到相关信息，搜索其他关键词试试！");
 		}
-		List<TagBO> tags=cs.listAllTag();
-		model.addAttribute("tags",tags);
+		List<TagBO> tags = cs.listAllTag();
+		model.addAttribute("tags", tags);
 		model.addAttribute("contents", contents);
 		return "fore/index";
 	}
@@ -108,6 +119,7 @@ public class ForeController {
 
 	/**
 	 * 按参数查询数据，如果三个参数都为空，则直接返回最近7天数据
+	 *
 	 * @param model
 	 * @param keyWord
 	 * @param keyDate
@@ -125,8 +137,8 @@ public class ForeController {
 			model.addAttribute("keyDate", keyDate);
 		if (StringUtils.hasText(keyTag))
 			model.addAttribute("keyTag", keyTag);
-		List<TagBO> tags=cs.listAllTag();
-		model.addAttribute("tags",tags);
+		List<TagBO> tags = cs.listAllTag();
+		model.addAttribute("tags", tags);
 		model.addAttribute("contents", contents);
 		return "fore/index";
 	}

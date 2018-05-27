@@ -4,6 +4,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
  <link rel="shortcut icon" href="${ctx}/admin/images/favicon.png"/>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
 <script type="text/javascript" src="${ctx}/jquery-3.1.1.min.js"></script>
 <script type="text/javascript" src="${ctx}/laydate/laydate.js"></script>
 <script type="text/javascript" src="${ctx}/semanticui/dist/components/dropdown.min.js"></script>
@@ -25,16 +26,24 @@
 <link rel="stylesheet" type="text/css" href="${ctx}/semanticui/dist/components/transition.min.css">
 <script type="text/javascript">
 //项目目录全局变量
-var pageContext="${ctx!""}";
+<#--var pageContext="${ctx!""}";-->
+var pageContext="";
 //定义三个变量记住查询条件
-var keyDate="${keyDate!""}";
+<#--var keyDate="${keyDate!""}";-->
+var keyDate="";
 var keyWord="";
 var keyTag="";
 //记住刷新页面后的keyTag
-var keyTagInitial="${keyTag!""}";
+<#--var keyTagInitial="${keyTag!""}";-->
+var keyTagInitial="";
 //禁止复制
-document.oncontextmenu=new Function("event.returnValue=false"); 
-document.onselectstart=new Function("event.returnValue=false"); 
+//document.oncontextmenu=new Function("event.returnValue=false");
+//document.onselectstart=new Function("event.returnValue=false");
+
+
+
+
+
 
 	function pageInitial() {
 		showTitle();
@@ -148,7 +157,7 @@ document.onselectstart=new Function("event.returnValue=false");
 .nav-right{}
 </style>
 <meta charset="UTF-8">
-<title>${(content.title)!""}</title>
+<title id="page-title">{{}}</title>
 </head>
 <body>
 <noscript> 
@@ -163,10 +172,9 @@ document.onselectstart=new Function("event.returnValue=false");
 			</div>
 
 			<div class="nav-middle">
-				<div class="ui  labeled input calender">
+				<div class="ui  labeled input calender" id="input-newsTime-vue">
 				    <label for="input-newsTime" class="ui label"><i class="calendar icon"></i></label>
-					<input type="text" placeholder="日期过滤" id="input-newsTime"
-						value="${keyDate?if_exists}">
+					<input type="text" placeholder="日期过滤" id="input-newsTime" v-model="{{keyDate}}">
 				</div>
 				<div class="ui search keysearch">
 					<div class="ui labeled input">
@@ -184,9 +192,9 @@ document.onselectstart=new Function("event.returnValue=false");
 								<i class="filter icon"></i>标签过滤
 							</div>
 							<div class="divider"></div>
-							<#list tags?if_exists as tag>
-							<div class="item" data-value="${tag.id!}">${tag.name!}</div>
-							</#list>
+							<div id="tags-vue" v-for="tag in tags">
+							<div class="item" data-value="{{tag.id}}">{{tag.name}}</div>
+                            </div>
 							<div class="item" data-value="0">无分类...</div>
 						</div>
 					</div>
