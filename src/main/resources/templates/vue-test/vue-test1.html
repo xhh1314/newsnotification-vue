@@ -4,6 +4,7 @@
     <title>Title</title>
     <script src="vue.js"></script>
 </head>
+<script type="text/javascript" src="vue.js"></script>
 <body>
 <div id="app">
     {{message}}
@@ -45,6 +46,45 @@
 
     </ol>
 
+</div>
+<style>
+    #app-8{  width: 200px;  height: 200px;border: 1px burlywood solid}
+    #app-8 button{width:50px;  height: 50px;}
+</style>
+
+<!--制作一个跑马灯效果-->
+<div id="app-7">
+<button v-on:click="substring">开始大喊</button> <button v-on:click="stop"> 停止</button>
+    <h4>{{msg}}</h4>
+
+</div>
+<!--测试事件修饰符-->
+<div id="app-8" @click="divHandler">
+
+    <button @click.stop="buttonHandler">d</button>
+</div>
+
+<!--简易计算器练习v-model-->
+<div id="app-9">
+    <input type="text" v-model="n1" >
+    <select v-model="action">
+        <option value="+">+</option>
+        <option value="-">-</option>
+        <option value="*">*</option>
+        <option value="/">/</option>
+    </select>
+    <input type="text"  v-model="n2">
+    <span>=</span>
+    <input type="text"  v-model="result">
+    <button v-on:click="calculate">计算</button>
+</div>
+<style>
+    .red{color:red}
+    .thin{ font-style: italic;}
+</style>
+<!--测试为属性绑定class-->
+<div id="app-10" >
+    <h3 v-bind:class="myClass">测试样式绑定</h3>
 </div>
 
 </body>
@@ -102,6 +142,76 @@
             {id:2,text:'鱼'},
             {id:3,text:'羊肉'}
         ]
+        }
+    });
+
+    var app7=new Vue({
+        el:'#app-7',
+        data:{
+            msg:"rr同学好想你见你啊",
+            interval:null
+        },
+        methods:{
+            substring(){
+                _this=this;
+                this.interval= setInterval(function () {
+                    var start=_this.msg.substring(0,1);
+                    var end=_this.msg.substring(1);
+                    _this.msg=end+start;
+                },400);
+
+            },
+            stop(){
+                clearInterval(this.interval);
+            }
+        }
+    });
+
+    var app8=new Vue({
+        el:'#app-8',
+        methods:{
+            divHandler(){
+                console.log("div被点击!");
+            },
+            buttonHandler(){
+                console.log("button被点击!");
+            }
+        }
+    });
+
+    var app9=new Vue({
+        el:'#app-9',
+        data:{
+            n1:0,
+            action:'+',
+            n2:0,
+            result:0
+        },
+        methods:{
+            calculate(){
+                switch (this.action){
+                    case '+':
+                        this.result=parseInt(this.n1)+parseInt(this.n2);
+                        break;
+                    case '-':
+                        this.result=this.n1-this.n2;
+                        break;
+                    case '*':
+                        this.result=this.n1*this.n2;
+                        break;
+                    case '/':
+                        this.result=this.n1/this.n2;
+                        break;
+                }
+            }
+        }
+
+    });
+
+    var app10=new Vue({
+        el:'#app-10',
+        data:{
+            myClass:['red','thin']
         }
     });
 </script>

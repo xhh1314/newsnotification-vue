@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> 操作表格</title>
+</head>
+<script type="text/javascript" src="vue.js"></script>
+<link rel="stylesheet" href="../../static/bootstrap/css/bootstrap.css" />
+<body>
+<div id="app-table">
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title"> 添加数据</h3>
+    </div>
+    <div class="panel-body form-inline">
+        <label>
+            id:<input type="text" class="form-control" v-model="entity.id">
+        </label>
+        <label >
+            name:<input type="text" class="form-control" v-model="entity.name" v-focus v-color="'blue'"  v-on:keyup.enter="add()">
+        </label>
+        <input type="button" class="btn btn-primary" value="添加" v-on:click="add">
+    </div>
+
+</div>
+
+
+<table class="table table-bordered" >
+    <tr>
+        <th>id</th>
+        <th>name</th>
+        <th>createTime</th>
+        <th>operation</th>
+    </tr>
+    <tbody>
+    <tr v-for="item in dataList" :key="item.id">
+        <th>{{item.id}}</th>
+        <th v-text="item.name"></th>
+        <th>{{item.createTime}}</th>
+        <th><button @click="deleteItem(item.id)">delete</button></th>
+    </tr>
+
+    </tbody>
+</table>
+
+</div>
+
+
+</body>
+<script type="text/javascript">
+
+    Vue.directive('focus',{
+        inserted:function(el){
+            el.focus();
+        }
+    });
+
+    Vue.directive('color',{
+        bind:function(el,binding){
+            el.style.color=binding.value;
+        }
+    });
+
+    var vm=new Vue({
+        el:'#app-table',
+        data:{
+            entity:{
+                id:null,
+                name:null,
+                createTime:null,
+            },
+            dataList:[
+                {id:1,name:'lihao',createTime:'2018-05-27'},
+                {id:2,name:'xrr',createTime:'2018-05-28'},
+                {id:3,name:'lyq',createTime:'2018-05-29'},
+                {id:4,name:'ycl',createTime:'2018-05-30'},
+                {id:5,name:'lgq',createTime:'2018-05-31'},
+            ]
+        },
+        methods:{
+            add(){
+                this.entity.createTime=new Date().toLocaleDateString();
+                this.dataList.push(this.entity);
+            },
+            deleteItem(id){
+                for(index in this.dataList){
+                    if(this.dataList[index].id==id){
+                        this.dataList.splice(index,1);
+                    }
+                }
+            }
+        }
+    });
+
+
+</script>
+</html>
