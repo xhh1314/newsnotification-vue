@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link rel="shortcut icon" href="../../static/image/favicon.png"/>
     <script type="text/javascript" src="vue.js"></script>
+    <script type="text/javascript" src="vue-resource.js"></script>
     <script type="text/javascript" src="../../static/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="../../static/laydate/laydate.js"></script>
     <script type="text/javascript" src="../../static/semanticui/dist/components/dropdown.min.js"></script>
@@ -94,6 +95,8 @@
         });
 
         $(document).ready(function () {
+
+           /*标签变更触发函数
             $(".dropdown").dropdown({
                 on: 'click',
                 allowCategorySelection: true,
@@ -105,7 +108,7 @@
                     if (keyTagTemp != text)
                         doSearch();
                 }
-            });
+            });*/
 
 
             //关键字 回车事件
@@ -135,51 +138,17 @@
             border: 1px solid black
         }*/
 
-        .notification-nav {
-            position: fixed;
-            top: 0px;
-            left: 0px;
-            height: 60px;
-            margin-bottom: 0px;
-            z-index: 2;
-            min-width: 1200px !important;
-        }
+        .notification-nav {  position: fixed;  top: 0px;  left: 0px;  height: 60px;  margin-bottom: 0px;  z-index: 2;  min-width: 1200px !important;  }
 
-        .notification-content {
-            position: fixed;
-            top: 46px;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 0px !important;
-            min-width: 750px;
-            z-index: 1;
-            border-top: none !important;
-            border-bottom: none !important;
-        }
+        .notification-content {  position: fixed;  top: 46px;  margin-left: auto;  margin-right: auto;  margin-top: 0px !important;  min-width: 750px;  z-index: 1;  border-top: none !important;  border-bottom: none !important;  }
 
-        .notification-nav .nav-left {
-            display: inline-block;
-            line-height: 56px;
-            width: 125px;
-        }
+        .notification-nav .nav-left {  display: inline-block;  line-height: 56px;  width: 125px;  }
 
-        .notification-nav .nav-left a {
-            color: #EA6F5A;
-            font-size: 20px;
-            padding: 10px !important;
-            border-right: none;
-        }
+        .notification-nav .nav-left a {  color: #EA6F5A;  font-size: 20px;  padding: 10px !important;  border-right: none;  }
 
-        .notification-nav .nav-left a {
-            margin-top: 5px;
-        }
+        .notification-nav .nav-left a {  margin-top: 5px;  }
 
-        .notification-nav .nav-middle {
-            display: block;
-            min-width: 750px;
-            margin-left: 65px;
-            height: 56px;
-        }
+        .notification-nav .nav-middle {  display: block;  min-width: 750px;  margin-left: 65px;  height: 56px;  }
 
         .nav-middle .tagSelect {
             display: inline-block;
@@ -231,6 +200,7 @@
 <noscript>
     <iframe src="*.htm"></iframe>
 </noscript>
+<div id="contentBody">
 <div class="ui attached stackable menu notification-nav">
 
     <div class="ui container nav-middle">
@@ -242,35 +212,26 @@
         <div class="nav-middle">
             <div class="ui  labeled input calender">
                 <label for="input-newsTime" class="ui label"><i class="calendar icon"></i></label>
-                <input type="text" placeholder="日期过滤" id="input-newsTime"
-                       value="${keyDate?if_exists}">
+                <input type="text" placeholder="日期过滤" id="input-newsTime" name="keyDate" v-model="keyDate" >
             </div>
             <div class="ui search keysearch">
                 <div class="ui labeled input">
                     <label for="keyword" class="ui label"><i class="keyboard icon"></i></label>
-                    <input class="prompt keyinput" type="text" id="keyword" placeholder="关键字搜索">
+                    <input class="prompt keyinput" type="text" id="keyword" name="keyWord" placeholder="关键字搜索" v-model="keyWord">
                 </div>
                 <div class="results"></div>
 
             </div>
             <div class="tagSelect">
-                <div class="ui labeled icon dropdown ">
                     <i class="tags icon"></i> <span class="text"></span>
-                    <div class="menu">
-                        <div class="header">
-                            <i class="filter icon"></i>标签过滤
-                        </div>
-                        <div class="divider"></div>
-                        <#list tags?if_exists as tag>
-                            <div class="item" data-value="${tag.id!}">${tag.name!}</div>
-                        </#list>
-                        <div class="item" data-value="0">无分类...</div>
-                    </div>
-                </div>
+                        <select class="ui search dropdown"  v-model="keyTag">
+                            <!--循环遍历出tag-->
+                            <option class="item"  v-for="tag in tags" data-filtered="filtered" v-bind:value="tag.id">{{tag.name}}</option>
+                        </select>
             </div>
         </div>
         <div class="nav-right">
-            <div class="ui  icon button search-button" onclick="doSearch()"><i class="search icon"></i>查询</div>
+            <div class="ui  icon button search-button" v-on:click="doSearch"><i class="search icon"></i>查询</div>
         </div>
     </div>
 </div>
@@ -290,13 +251,14 @@
                 </div>
                 <div class="extra">
                     <!-- 循环tags -->
-                    <div class="ui label"></div>
+                    <div class="ui label" v-for="tag in content.tags">{{tag.name}}</div>
                 </div>
             </div>
         </div>
 
     </div>
 
+</div>
 </div>
 </body>
 <script type="text/javascript" src="listContent.js"></script>

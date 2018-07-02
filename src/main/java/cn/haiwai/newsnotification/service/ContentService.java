@@ -174,7 +174,8 @@ public class ContentService {
 	 */
 	public List<ContentBO> listContents() {
 		// 获取最近7天数据
-		List<ContentDO> contentsDO = contentDao.listByRecentSevenDay();
+		//List<ContentDO> contentsDO = contentDao.listByRecentSevenDay();
+		List<ContentDO> contentsDO = contentDao.listContent();
 		if (contentsDO == null || contentsDO.isEmpty())
 			return null;
 		//contentDOList.addAll(contentsDO);

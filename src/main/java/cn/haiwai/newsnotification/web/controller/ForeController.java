@@ -25,7 +25,7 @@ public class ForeController {
 	private ContentService cs;
 	@Autowired
 	private ContentDao contentDao;
-	private static final Logger log= LoggerFactory.getLogger("ForeController");
+	private static final Logger log = LoggerFactory.getLogger("ForeController");
 
 	/**
 	 * @param model
@@ -36,20 +36,21 @@ public class ForeController {
 		log.error("---------------------日志级别为：error-----------------------------{}", "dd");
 		log.info("---------------------日志级别为：info-----------------------------{}", "dd");
 		log.debug("---------------------日志级别为：debug-----------------------------{}", "dd");
-//		List<ContentBO> contents = cs.listContents();
-//		if (contents == null) {
-//			model.addAttribute("message", "最近7天无数据，请查看其他日期！");
-//		}
-//		List<TagBO> tags = cs.listAllTag();
-//		model.addAttribute("tags", tags);
-//		// 访问首页时，默认显示当天日期
-//		model.addAttribute("keyDate", TimeTransfer.getToday());
-//		model.addAttribute("contents", contents);
+		// List<ContentBO> contents = cs.listContents();
+		// if (contents == null) {
+		// model.addAttribute("message", "最近7天无数据，请查看其他日期！");
+		// }
+		// List<TagBO> tags = cs.listAllTag();
+		// model.addAttribute("tags", tags);
+		// // 访问首页时，默认显示当天日期
+		// model.addAttribute("keyDate", TimeTransfer.getToday());
+		// model.addAttribute("contents", contents);
 		return "fore/index";
 	}
 
 	@RequestMapping(value = "/content/getIndexContentData")
 	@ResponseBody
+	@CrossOrigin
 	public IndexContentVo getIndexContentData() {
 		List<ContentBO> contents = cs.listContents();
 		List<TagBO> tags = cs.listAllTag();
@@ -147,10 +148,39 @@ public class ForeController {
 		return "fore/index";
 	}
 
+	/**
+	 * 按参数查询数据，如果三个参数都为空，则直接返回最近7天数据
+	 *
+	 * @param model
+	 * @param keyWord
+	 * @param keyDate
+	 * @param keyTag
+	 * @return
+	 */
+	@RequestMapping(value = "/searchJson", method = RequestMethod.GET)
+	@ResponseBody
+	@CrossOrigin(value = {"*"})
+	public IndexContentVo searchByArgusJson(ModelMap model, @RequestParam("keyWord") String keyWord,
+			@RequestParam("keyDate") String keyDate, @RequestParam("keyTag") String keyTag) {
+		List<ContentBO> contents = cs.searchByArgus(keyWord, keyDate, keyTag);
+		IndexContentVo indexContentVo = new IndexContentVo();
+		if (contents == null) {
+			indexContentVo.setMessage("未搜索到内容，请调整日期、关键字或标签分类参数。");
+		}
+		if (StringUtils.hasText(keyDate))
+			indexContentVo.setKeyDate(keyDate);
+		if (StringUtils.hasText(keyTag))
+			indexContentVo.setKeyTag(keyTag);
+		List<TagBO> tags = cs.listAllTag();
+		indexContentVo.setTags(tags);
+		indexContentVo.setContents(contents);
+		return indexContentVo;
+	}
+
 	@RequestMapping(value = "/listContent")
 	@ResponseBody
 	@CrossOrigin
-	public  List<ContentDO> listContentBO(){
+	public List<ContentDO> listContentBO() {
 		return contentDao.listContent();
 	}
 

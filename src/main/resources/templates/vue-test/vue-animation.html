@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue 动画测试</title>
+    <script src="vue.js"></script>
+    <script src="vue-resource.js"></script>
+    <link rel="stylesheet"  href="animate.css">
+</head>
+<body>
+
+<div id="app1">
+    <button @click="flag=!flag">toggle</button>
+    <div>
+        <transition name="fade">
+        <h3 v-show="flag">love you</h3>
+        </transition>
+    </div>
+
+
+        <button @click="flag1=!flag1">使用第三方库</button>
+        <transition enter-active-class="animated bounceInLeft" leave-active-class="animated bounceOutRight">
+            <h3 v-show="flag1">love you</h3>
+        </transition>
+
+
+</div>
+
+</body>
+<style>
+    .fade-enter-active, .fade-leave-active {
+        transition: opacity .5s;
+    }
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        opacity: 0;
+    }
+</style>
+
+<script type="text/javascript">
+    var app1=new Vue({
+        el:"#app1",
+        data:{
+            flag:true,
+            flag1:true
+        }
+
+    })
+</script>
+
+</html>

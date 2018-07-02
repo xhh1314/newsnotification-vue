@@ -87,6 +87,14 @@
     <h3 v-bind:class="myClass">测试样式绑定</h3>
 </div>
 
+
+
+<!--测试ref功能,获取原生js对象-->
+<div id="app11">
+    <button @click="printRef">测试ref</button>
+    <span ref="mySpan">ref 实例span</span>
+</div>
+
 </body>
 <script type="text/javascript">
     var app=new Vue({
@@ -212,6 +220,15 @@
         el:'#app-10',
         data:{
             myClass:['red','thin']
+        }
+    });
+
+    var app11=new Vue({
+        el:'#app11',
+        methods:{
+            printRef(){
+                console.log(this.$refs.mySpan.innerText);
+            }
         }
     });
 </script>

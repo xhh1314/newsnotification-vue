@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>component</title>
+    <script src="vue.js"></script>
+    <script src="vue-resource.js"></script>
+</head>
+<body>
+<div id="app1">
+    <component1></component1>
+    <my-component2></my-component2>
+    <my-component3></my-component3>
+
+    <button @click="flag=true">登陆</button>
+    <button @click="flag=false">注册</button>
+    <login v-if="flag"></login>
+    <register v-else="flag"></register>
+</div>
+
+
+
+
+<template id="component2">
+    <div>
+        <h4>这是用template定义的组件</h4>
+    </div>
+</template>
+
+
+<template id="component3">
+<div>
+    <h4>测试组件中data的使用:{{message}}</h4>
+</div>
+</template>
+
+<template id="functionTemplate">
+    <button @click="myTest" >点击测试方法传递</button>
+</template>
+
+
+<div id="app2">
+    <child1 v-bind:parent-message="msg"></child1>
+    <base-checkbox v-model="lovingVue"></base-checkbox>
+    <function-template v-on:my-function="parentFunction"></function-template>
+</div>
+
+</body>
+
+<script>
+    var component1=Vue.extend({
+        template:'<h3>定制的组件1</h3>'
+    });
+    Vue.component('myComponent2',{
+        template:'#component2'
+    });
+    /*测试组件中data的使用*/
+    Vue.component('myComponent3',{
+        template:'#component3',
+        data:function(){
+            return {message:'my name is rr'}
+        }
+    });
+    Vue.component('component1',component1);
+
+    Vue.component('login',{
+        template:'<h3>登陆组件</h3>'
+    });
+    Vue.component('register',{
+        template:'<h3>注册组件</h3>'
+    });
+
+    var app1=new Vue({
+        el:"#app1",
+        data:{
+            flag:true
+        },
+        methods:{
+            changeFlag(val){
+                this.flag=val;
+            }
+        }
+    });
+
+    Vue.component('base-checkbox', {
+        model: {
+            prop: 'checked',
+            event: 'change'
+        },
+        props: {
+            checked: Boolean
+        },
+        template: `
+    <input
+      type="checkbox"
+      v-bind:checked="checked"
+      v-on:change="$emit('change', $event.target.checked)"
+    >
+  `
+    });
+
+
+    Vue.component('functionTemplate',{
+        template:'#functionTemplate',
+        methods:{
+            myTest(){
+                console.log("child test function");
+                this.$emit('my-function',this.name);
+            }
+        },
+        data:function () {
+            return {
+                name:'lihao'
+            }
+        }
+    });
+
+
+
+    var app2=new Vue({
+        el:'#app2',
+        data:{
+            msg:'123父组件中的值',
+            lovingVue:''
+        },
+        components:{
+            'child1':{
+                template:'<h4>这是子组件,获取到父组件的值:{{parentMessage}}</h4>',
+                props:['parentMessage']
+            }
+        },
+       methods:{
+            parentFunction(data){
+                console.log("parent function:"+data);
+            }
+       }
+    });
+
+
+
+
+
+</script>
+</html>

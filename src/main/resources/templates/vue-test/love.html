@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>小姐姐，我可以撩你么</title>
+    <script src="vue.js"></script>
+    <script src="vue-resource.js"></script>
+    <link rel="stylesheet"  href="animate.css">
+    <link rel="stylesheet" type="text/css" href="http://unpkg.com/iview/dist/styles/iview.css">
+    <script type="text/javascript" src="http://unpkg.com/iview/dist/iview.min.js"></script>
+</head>
+<body>
+
+<div id="love">
+    <template>
+        <button v-show="flag" v-on:mousemove="notLikeMove()" @click="notLikeClick(this)" v-bind:style="styleObject" id="notLike">不喜欢</button>
+        <button v-show="flag" @click="likeClick(this)" v-bind:style="likeStyleObject">喜欢</button>
+    </template>
+
+</div>
+
+
+</body>
+<script type="text/javascript">
+    var love = new Vue({
+        el: "#love",
+        data: {
+            count: 0,
+            alertCount:0,
+            x: 0,
+            y: 0,
+            flag: true,
+            styleObject: {
+                position: 'relative',
+                top: '50%',
+                left: '60%'
+            },
+            likeStyleObject:{
+                position: 'relative',
+                top: '50%',
+                left: '40%'
+            }
+        },
+        methods: {
+            notLikeMove() {
+                if(this.count>3){
+                    if(this.alertCount>=1)
+                    {
+                        return;
+                    }
+                    this.styleObject.top='50%';
+                    this.styleObject.left='60%';
+                    this.$Message.warning('I see,but I still miss you');
+                    this.alertCount++;
+                    return;
+                }
+                this.x = this.randomPoint(2);
+                this.y = this.randomPoint(2);
+                this.styleObject.top=this.x+'%';
+                this.styleObject.left=this.y+'%';
+                this.count++;
+
+            },
+            notLikeClick(){
+                this.$Message.error('no no no ...');
+            },
+            likeClick(val){
+                this.$Message.success('我也喜欢你');
+            },
+            randomPoint(n) {
+                var rnd = "";
+                for (var i = 0; i < n; i++)
+                    rnd += Math.floor(Math.random() * 10);
+                return rnd;
+            },
+
+
+        }
+    });
+
+
+
+
+</script>
+<style>
+    /**{border: solid}*/
+    #love {position: static;width: 1920px;height: 1080px; border-style: solid;
+    margin:auto auto}
+    .sayYou{position: relative;top: 20%;margin-left: auto;margin-right: auto;
+        width: 30%;text-align: center}
+</style>
+</html>
