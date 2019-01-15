@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="../vue.js"></script>
+    <script src="../vue-router.js"></script>
+</head>
+<body>
+<div id="app1">
+    <!--注意前面的#号 代表使用路由调整，而不是到一个新的url地址-->
+    <a href="#/login/10">login</a>
+    <a href="#/register">register</a>
+
+    <router-link to="/login?id=11">login</router-link>
+    <router-link to="/register">register</router-link>
+<router-view></router-view>
+</div>
+
+</body>
+
+<script>
+
+    const login = {
+        template: '<h1>login,userId:{{$route.params.id}}</h1>'
+    };
+    const register = {
+        template: '<h1>register</h1>'
+    };
+
+
+    const routes = [
+        //页面刚刚加载时可以重定向到想要显示的组件
+        {path:'/',redirect:{path:'/login'}},
+        {path: '/login/:id', component: login},
+        {path: '/register', component: register}
+    ];
+
+    const routerObject = new VueRouter({
+        routes: routes
+    });
+
+    const app = new Vue({
+        el: '#app1',
+        data: {},
+        methods: {},
+        router:routerObject
+    });
+
+</script>
+</html>
